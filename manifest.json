@@ -1,0 +1,13 @@
+
+{
+  "name": "Continera Curtains Control",
+  "short_name": "Curtains",
+  "description": "DAF XG+ Curtains Position Control",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#111315",
+  "theme_color": "#111315",
+  "categories": ["utilities", "lifestyle"]
+}
