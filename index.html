@@ -200,24 +200,20 @@ const status = document.getElementById("status");
 const leftCurtain = document.getElementById("leftCurtain");
 const rightCurtain = document.getElementById("rightCurtain");
 
-slider.addEventListener("input", () => {
+const STORAGE_KEY = "contineraCurtainsPosition";
+
+function updateCurtains() {
   const position = Number(slider.value);
 
   value.textContent = position + "%";
 
-  const movement = position;
-
-leftCurtain.style.transform =
-  `translateX(${movement - 100}%)`;
-
-rightCurtain.style.transform =
-  `translateX(${100 - movement}%)`;
+  const offset = (100 - position) / 2;
 
   leftCurtain.style.transform =
-    `translateX(${movement - 100}%)`;
+    `translateX(${-100 + offset}%)`;
 
   rightCurtain.style.transform =
-    `translateX(${100 - movement}%)`;
+    `translateX(${100 - offset}%)`;
 
   if (position === 0) {
     status.textContent = "Штори відкриті";
@@ -226,7 +222,28 @@ rightCurtain.style.transform =
   } else {
     status.textContent = "Штори частково закриті";
   }
+}
+
+// Завантаження збереженого положення
+const savedPosition = localStorage.getItem(STORAGE_KEY);
+
+if (
+  savedPosition !== null &&
+  Number.isFinite(Number(savedPosition)) &&
+  Number(savedPosition) >= 0 &&
+  Number(savedPosition) <= 100
+) {
+  slider.value = savedPosition;
+}
+
+// Зміна положення штор
+slider.addEventListener("input", () => {
+  localStorage.setItem(STORAGE_KEY, slider.value);
+  updateCurtains();
 });
+
+// Початкове відображення
+updateCurtains();
 </script>
 
 </body>
