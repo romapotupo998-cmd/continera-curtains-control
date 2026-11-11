@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111315">
+
 <title>Continera Curtains Control</title>
 
 <style>
@@ -60,17 +61,21 @@ h1 {
   overflow: hidden;
   border: 4px solid #414b50;
   border-radius: 14px;
+
   background: linear-gradient(
     180deg,
     #344c5a,
     #8299a2
   );
+
+  --position: 0;
 }
 
 .window::before {
   content: "";
   position: absolute;
   inset: 0;
+
   background: linear-gradient(
     180deg,
     transparent 65%,
@@ -82,7 +87,9 @@ h1 {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 50%;
+
+  width: calc(var(--position) * 0.5%);
+  
   background: repeating-linear-gradient(
     90deg,
     #263c42 0px,
@@ -90,18 +97,17 @@ h1 {
     #34545a 15px,
     #263c42 20px
   );
-  transition: transform 0.35s ease;
+
+  transition: width 0.35s ease;
   z-index: 2;
 }
 
 .curtain.left {
   left: 0;
-  transform: translateX(-100%);
 }
 
 .curtain.right {
   right: 0;
-  transform: translateX(100%);
 }
 
 .window-frame {
@@ -162,9 +168,9 @@ input[type="range"] {
   <h1>Curtains Control</h1>
   <div class="subtitle">DAF XG+ • Cabin System</div>
 
-  <div class="window">
-    <div class="curtain left" id="leftCurtain"></div>
-    <div class="curtain right" id="rightCurtain"></div>
+  <div class="window" id="window">
+    <div class="curtain left"></div>
+    <div class="curtain right"></div>
     <div class="window-frame"></div>
   </div>
 
@@ -196,25 +202,25 @@ input[type="range"] {
 const slider = document.getElementById("curtainSlider");
 const value = document.getElementById("value");
 const status = document.getElementById("status");
-
-const leftCurtain = document.getElementById("leftCurtain");
-const rightCurtain = document.getElementById("rightCurtain");
+const windowElement = document.getElementById("window");
 
 const STORAGE_KEY = "contineraCurtainsPosition";
 
-function updateCurtains() {
-  const position = Number(slider.value);
+// Оновлення положення штор
+function updateCurtains(position) {
 
+  position = Math.max(0, Math.min(100, Number(position)));
+
+  slider.value = position;
   value.textContent = position + "%";
 
-  const offset = (100 - position) / 2;
+  // Передаємо положення безпосередньо у CSS
+  windowElement.style.setProperty(
+    "--position",
+    position
+  );
 
-  leftCurtain.style.transform =
-    `translateX(${-100 + offset}%)`;
-
-  rightCurtain.style.transform =
-    `translateX(${100 - offset}%)`;
-
+  // Оновлення статусу
   if (position === 0) {
     status.textContent = "Штори відкриті";
   } else if (position === 100) {
@@ -227,23 +233,31 @@ function updateCurtains() {
 // Завантаження збереженого положення
 const savedPosition = localStorage.getItem(STORAGE_KEY);
 
+let initialPosition = 0;
+
 if (
   savedPosition !== null &&
+  savedPosition.trim() !== "" &&
   Number.isFinite(Number(savedPosition)) &&
   Number(savedPosition) >= 0 &&
   Number(savedPosition) <= 100
 ) {
-  slider.value = savedPosition;
+  initialPosition = Number(savedPosition);
 }
 
-// Зміна положення штор
+// Зміна повзунка
 slider.addEventListener("input", () => {
-  localStorage.setItem(STORAGE_KEY, slider.value);
-  updateCurtains();
+
+  const position = Number(slider.value);
+
+  localStorage.setItem(STORAGE_KEY, position);
+
+  updateCurtains(position);
 });
 
 // Початкове відображення
-updateCurtains();
+updateCurtains(initialPosition);
+
 </script>
 
 </body>
