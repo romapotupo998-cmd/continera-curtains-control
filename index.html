@@ -205,7 +205,13 @@ slider.addEventListener("input", () => {
 
   value.textContent = position + "%";
 
-  const movement = position / 2;
+  const movement = position;
+
+leftCurtain.style.transform =
+  `translateX(${movement - 100}%)`;
+
+rightCurtain.style.transform =
+  `translateX(${100 - movement}%)`;
 
   leftCurtain.style.transform =
     `translateX(${movement - 100}%)`;
