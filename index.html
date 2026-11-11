@@ -83,20 +83,36 @@ h1 {
   );
 }
 
+
 .curtain {
   position: absolute;
   top: 0;
   bottom: 0;
-
   width: calc(var(--position) * 0.5%);
-  
-  background: repeating-linear-gradient(
-    90deg,
-    #263c42 0px,
-    #263c42 12px,
-    #34545a 15px,
-    #263c42 20px
-  );
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.25) 0px,
+      rgba(0, 0, 0, 0.25) 3px,
+      transparent 5px,
+      transparent 13px,
+      rgba(255, 255, 255, 0.10) 16px,
+      transparent 20px,
+      transparent 25px
+    ),
+    linear-gradient(
+      90deg,
+      #1c3035,
+      #3b5c61 25%,
+      #263e43 50%,
+      #3b5c61 75%,
+      #1c3035
+    );
+
+  box-shadow:
+    inset 5px 0 10px rgba(0, 0, 0, 0.3),
+    inset -5px 0 10px rgba(0, 0, 0, 0.3);
 
   transition: width 0.35s ease;
   z-index: 2;
@@ -104,11 +120,14 @@ h1 {
 
 .curtain.left {
   left: 0;
+  border-right: 1px solid rgba(255,255,255,0.15);
 }
 
 .curtain.right {
   right: 0;
+  border-left: 1px solid rgba(255,255,255,0.15);
 }
+  
 
 .window-frame {
   position: absolute;
